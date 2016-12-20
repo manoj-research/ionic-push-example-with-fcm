@@ -19,6 +19,36 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    //FCMPlugin.getToken( successCallback(token), errorCallback(err) ); 
+    //Keep in mind the function will return null if the token has not been established yet. 
+    FCMPlugin.getToken(
+      function(token){
+        alert(token);
+        console.log("TOKEN (COPY AND USE in server-fcm/message.php file): " + token);
+      },
+      function(err){
+        console.log('error retrieving token: ' + err);
+      }
+    )
+
+    FCMPlugin.onNotification(
+      function(data){
+        if(data.wasTapped){
+          //Notification was received on device tray and tapped by the user.
+          alert( JSON.stringify(data) );
+        }else{
+          //Notification was received in foreground. Maybe the user needs to be notified.
+          alert( JSON.stringify(data) );
+        }
+      },
+      function(msg){
+        console.log('onNotification callback successfully registered: ' + msg);
+      },
+      function(err){
+        console.log('Error registering onNotification callback: ' + err);
+      }
+    );
   });
 })
 
